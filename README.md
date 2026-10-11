@@ -15,6 +15,32 @@ Next.js 15 (App Router), React Three Fiber, Framer Motion and Tailwind CSS.
 - **Real support form** that relays messages straight to the admin's Telegram
   chat through the Bot API. No database, no polling process.
 - **Sections**: Why Choose Us, Quick Access, Trust & Support, Footer.
+- **Bot integration**: the landing page opens inside Telegram from the bot's
+  menu button and from `/start`.
+
+## Bot integration
+
+Two routes connect the bot to the site:
+
+| Route | Purpose |
+| --- | --- |
+| `POST /api/telegram/webhook` | Handles `/start`, `/support`, `/help`, `/channel`, `/free` and free-form text. Every reply carries an inline `web_app` button that opens the 3D app inside Telegram. |
+| `GET|POST /api/telegram/setup?key=SETUP_KEY` | One-shot configuration: menu button (`web_app` type), command list, profile text, webhook registration. |
+
+Set `SETUP_KEY` and `TELEGRAM_WEBHOOK_SECRET`, deploy, then hit the setup route
+once:
+
+```bash
+curl "https://<your-domain>/api/telegram/setup?key=$SETUP_KEY"
+```
+
+Incoming webhook calls are authenticated with Telegram's
+`X-Telegram-Bot-Api-Secret-Token` header; requests without it are rejected with
+`401`. The setup route refuses to run without `SETUP_KEY`, so nobody else can
+reconfigure the bot.
+
+Once configured, the bot shows a **🛟 Support** menu button that opens the app,
+and `/start` replies with an **Open Support App** inline button.
 
 ## 3D performance
 
