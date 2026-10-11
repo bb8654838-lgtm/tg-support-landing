@@ -24,7 +24,16 @@ import {
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-/** Inline keyboard that opens the Mini App. */
+/**
+ * Inline keyboard that opens the Mini App.
+ *
+ * Two entry points on purpose:
+ *   · `web_app` — the proper Mini App launch (needs the app registered in
+ *     BotFather; provides initData, theme, full-screen and haptics)
+ *   · `url` — a plain link that opens the same page in Telegram's in-app
+ *     browser. It always works, so a customer is never left with a dead
+ *     button if the Mini App registration is missing or the client is old.
+ */
 function appKeyboard(): ReplyKeyboard {
   return {
     inline_keyboard: [
@@ -33,6 +42,7 @@ function appKeyboard(): ReplyKeyboard {
         { text: "📣 Official Channel", url: "https://t.me/+TC0elDjaFC1hNzA9" },
         { text: "🎁 Free Stuff", url: "https://tinyurl.com/cswfchke" },
       ],
+      [{ text: "🌐 Open in browser", url: miniAppUrl() }],
     ],
   };
 }
