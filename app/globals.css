@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Design tokens — dark premium / holographic
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@layer base {
+  :root {
+    --bg: #05070f;
+    --fg: #e8ecf8;
+    --violet: #6d5efc;
+    --electric: #38bdf8;
+    --neon: #22d3ee;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--fg);
+    overflow-x: hidden;
+    /* Avoid the WebView's own overscroll glow breaking the dark theme. */
+    overscroll-behavior-y: none;
+  }
+
+  ::selection {
+    background: rgba(109, 94, 252, 0.4);
+    color: #fff;
+  }
+
+  /* Slim, dark scrollbar (desktop only) */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #05070f;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #4c1d95, #0e7490);
+    border-radius: 99px;
+    border: 2px solid #05070f;
+  }
+}
+
+@layer utilities {
+  /* Faint technical grid, faded at the edges */
+  .grid-overlay {
+    background-image: linear-gradient(to right, rgba(99, 102, 241, 0.07) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(99, 102, 241, 0.07) 1px, transparent 1px);
+    background-size: 54px 54px;
+    mask-image: radial-gradient(circle at 50% 22%, black, transparent 72%);
+    -webkit-mask-image: radial-gradient(circle at 50% 22%, black, transparent 72%);
+  }
+
+  .font-display {
+    font-family: var(--font-display), system-ui, sans-serif;
+  }
+}
+
+/* Respect the OS reduced-motion setting everywhere. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
