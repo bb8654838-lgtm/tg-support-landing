@@ -37,7 +37,10 @@ async function run(req: Request) {
   results.commands = await setCommands();
   results.description = await setDescription();
 
-  const hook = await setWebhook(expected);
+  // The webhook secret must be the SAME value the webhook route validates
+  // against, otherwise Telegram's own calls come back 401.
+  const webhookSecret = (process.env.TELEGRAM_WEBHOOK_SECRET ?? "").trim() || expected;
+  const hook = await setWebhook(webhookSecret);
   results.webhook = hook.detail;
   results.webhookOk = hook.ok;
 
