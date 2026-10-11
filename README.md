@@ -42,6 +42,39 @@ reconfigure the bot.
 Once configured, the bot shows a **🛟 Support** menu button that opens the app,
 and `/start` replies with an **Open Support App** inline button.
 
+### ⚠️ Required: register the Mini App in BotFather
+
+`setChatMenuButton` and inline `web_app` buttons configure *where* the entry
+point is, but they do **not** register the app. Telegram only launches a Mini
+App that is attached to the bot in BotFather, and **there is no Bot API method
+that performs this registration** — the Bot API exposes only `setWebhook` and
+`getWebhookInfo` for web-related setup. Until the app is registered, a
+`web_app` button renders but the tap is a **silent no-op**: no error, no
+message, nothing in `getWebhookInfo`.
+
+Verify with:
+
+```bash
+curl -s "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/getMe" | grep has_main_web_app
+# "has_main_web_app": false  → not registered yet
+```
+
+Register it once, in the Telegram app:
+
+1. Open **@BotFather** → send `/newapp`
+2. Pick **Svbshopbot**
+3. **App name:** `Support`
+4. **App title:** `Support Desk`
+5. **Photo:** skip (send `/empty` or skip the step)
+6. **Web App URL:** `https://tg-support-landing.vercel.app`
+7. **Short name:** `support` → this makes `https://t.me/Svbshopbot/support` work
+
+Alternatively: `/mybots` → **Svbshopbot** → **Bot Settings** →
+**Configure Mini App** → **Enable Mini App** → send the URL.
+
+After registration `has_main_web_app` becomes `true` and every entry point
+works: the menu button, the `/start` inline button, and the direct link.
+
 ## 3D performance
 
 The scene runs in two tiers and picks between them automatically:

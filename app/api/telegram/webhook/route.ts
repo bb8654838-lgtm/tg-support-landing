@@ -27,12 +27,10 @@ export const dynamic = "force-dynamic";
 /**
  * Inline keyboard that opens the Mini App.
  *
- * Two entry points on purpose:
- *   · `web_app` — the proper Mini App launch (needs the app registered in
- *     BotFather; provides initData, theme, full-screen and haptics)
- *   · `url` — a plain link that opens the same page in Telegram's in-app
- *     browser. It always works, so a customer is never left with a dead
- *     button if the Mini App registration is missing or the client is old.
+ * `web_app` is the only correct way to launch a Mini App, but Telegram will
+ * silently ignore the tap unless the app is registered to the bot in BotFather
+ * (/newapp, or Bot Settings → Configure Mini App). There is no API that can
+ * perform that registration — see README "BotFather setup".
  */
 function appKeyboard(): ReplyKeyboard {
   return {
@@ -42,7 +40,6 @@ function appKeyboard(): ReplyKeyboard {
         { text: "📣 Official Channel", url: "https://t.me/+TC0elDjaFC1hNzA9" },
         { text: "🎁 Free Stuff", url: "https://tinyurl.com/cswfchke" },
       ],
-      [{ text: "🌐 Open in browser", url: miniAppUrl() }],
     ],
   };
 }
