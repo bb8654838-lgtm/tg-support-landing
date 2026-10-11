@@ -30,9 +30,12 @@ export const dynamic = "force-dynamic";
  * This is per-instance, which is the right trade-off for a single landing page:
  * it stops casual flooding without needing Redis or a database. A distributed
  * deployment would swap this for a shared store.
+ *
+ * The threshold is deliberately loose because mobile carriers put many users
+ * behind one NAT address — a tight limit would lock out real customers.
  */
 const WINDOW_MS = 60_000;
-const MAX_PER_WINDOW = 4;
+const MAX_PER_WINDOW = 8;
 const hits = new Map<string, number[]>();
 
 function rateLimited(key: string): boolean {
