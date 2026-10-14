@@ -275,6 +275,7 @@ function useAdaptiveQuality(): Quality {
   const frames = useRef(0);
   const last = useRef(0);
   const demoted = useRef(false);
+  const badSamples = useRef(0);
 
   useEffect(() => {
     frames.current = 0;
@@ -298,9 +299,14 @@ function useAdaptiveQuality(): Quality {
       frames.current = 0;
       last.current = now;
       // Two consecutive bad samples before demoting, to ignore one-off stalls.
-      if (fps > 0 && fps < 28 && !demoted.current) {
-        demoted.current = true;
-        setQuality("lite");
+      if (fps > 0 && fps < 28) {
+        badSamples.current += 1;
+        if (badSamples.current >= 2 && !demoted.current) {
+          demoted.current = true;
+          setQuality("lite");
+        }
+      } else {
+        badSamples.current = 0;
       }
     }, 2500);
 
